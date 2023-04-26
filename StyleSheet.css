@@ -1,4 +1,5 @@
 /* Add a black background color to the top navigation */
+
 .topnav {
     font: Verdana;
     font-size: 12px;
@@ -22,5 +23,11 @@
     color: black;
   }
 
+
+  .topnav canvas#AVATAR {
+    float: left;
+    margin-right: 10px;
+    margin-left: 10px;
+  }
 
   
