@@ -1,27 +1,35 @@
 <?php
-session_start();
 
 $title = "Login";
+$stylesheet = "DataBase/Registration.css";
 include("DataBase/Header.php");
-//require_once("DataBase/functions.php");
+
+// set Username and Password to "" or null somewhere at the begining ... 
+
 ?>
 
 
-<h1><?= $title ?></h1>
-
-<form method="POST" action="index.php" onsubmit="return ResolveErrors()">
-    <label for="username">Username:</label>
+<h1>Login</h1>
+<br><br>
+<form method="POST" id="Register" action="index.php" onsubmit="return ResolveErrors()">
+    <label for="username"></label>
     <input type="text" name="username" id="username" placeholder="Username..." required oninput="checkUsername()"><br>
     <div><span id="username-error"></span></div>
 
-    <label for="password">Password:</label>
+    <label for="password"></label>
     <input type="password" name="password" id="password" placeholder="Password..." required oninput="checkPassword()"><br>
     <div><span id="password-error"></span></div>
 
-    <label for="password">Confirm Password:</label>
-    <input type="password" name="confpassword" id="confpassword" placeholder="Same Password..." required oninput="checkConfPassword()"><br>
-    <div><span id="confpassword-error"></span></div>
+    <label for="password"></label>
+    <input type="password" name="confpassword" id="confpassword" placeholder="Confirm Password..." required oninput="checkConfPassword()"><br>
+    <div><span id="confpassword-error"></span></div><br>
 
+    <br>
+    <div id="main">
+    <img src="DataBase/BackGround/Registration.jpg" alt="Arcade Image">
+</div>
+
+    <br>
     <fieldset>
         <legend>Avatar</legend>
         <figure>
@@ -117,22 +125,20 @@ include("DataBase/Header.php");
             </label>
 
             <p id="selected-skin-value"></p>
+
+
+            <br><br><br>
+            <canvas id='avatar' width="120" height="120"></canvas>
         </figure>
-
-        <canvas id="canvas"></canvas>
-
     </fieldset>
 
-
-
-    <button type="submit" name="Login" id="Login" value="Login">Register</button>
+    <br><br><br>
+    <button type="submit" name="submit" id="Login" value="Login">Register</button>
     <div><span id="validation-error"></span></div>
-
-
 </form>
 
 <script>
-    function checkUsername() { // change name 
+    function checkUsername() { 
         var username = document.getElementById("username").value;
 
         if (username.length > 30) {
@@ -140,23 +146,24 @@ include("DataBase/Header.php");
             return false;
         }
 
-        var special_chars = '”!@#%&^*()+={}[]—;:“\'"<>?/';
+        var special_chars = '”!@#%&^*()+={}[]-;:“\'"<>?/';
         for (var i = 0; i < username.length; i++) {
             var char = username.charAt(i);
             if (special_chars.indexOf(char) !== -1) {
-                document.getElementById("username-error").innerHTML = "Special characters are not allowed : (”!@#%&^*()+={}[]—;:`\"'<>?/)";
+                document.getElementById("username-error").innerHTML = "Special characters are not allowed for Username: (”!@#%&^*()+={}[]—;:`\"'<>?/)";
                 return false;
             } else if (char === " ") {
-                document.getElementById("username-error").innerHTML = "White Spaces are not allowed Username must be a single word less than 30 Characters";
+                document.getElementById("username-error").innerHTML = "White Spaces are not allowed, Username must be a single word less than 30 Characters";
                 return false;
             }
         }
 
         document.getElementById("username-error").innerHTML = "";
+        localStorage.setItem("Username" , username);
         return true;
     }
 
-    function checkPassword() { // change name 
+    function checkPassword() { 
         var Password = document.getElementById("password").value;
 
         if (Password.length < 8) {
@@ -166,10 +173,11 @@ include("DataBase/Header.php");
 
 
         document.getElementById("password-error").innerHTML = "";
+        localStorage.setItem("Password", Password);
         return true;
     }
 
-    function checkConfPassword() { // change name 
+    function checkConfPassword() { 
         var Password = document.getElementById("password").value;
         var confPassword = document.getElementById("confpassword").value;
 
@@ -196,15 +204,8 @@ include("DataBase/Header.php");
     }
 </script>
 
-
-<!-- HTML code for the avatar -->
-<canvas id='avatar' width="50" height="50"></canvas>
-
-<!-- JavaScript code to draw the avatar -->
-
-
 <script>
-    // change the names ... 
+
     const selectedEyes = new Image();
     selectedEyes.src = `DataBase/emoji/eyes/${localStorage.getItem('Eyes')}.png`;
 
@@ -225,7 +226,7 @@ include("DataBase/Header.php");
         radio.addEventListener('change', function() {
             selectedEyes.src = `DataBase/emoji/eyes/${this.value}.png`;
             drawAvatar();
-            saveData();
+            saveData("Eyes");
         });
     });
 
@@ -234,7 +235,7 @@ include("DataBase/Header.php");
         radio.addEventListener('change', function() {
             selectedMouth.src = `DataBase/emoji/mouth/${this.value}.png`;
             drawAvatar();
-            saveData();
+            saveData("Mouth");
         });
     });
 
@@ -243,7 +244,7 @@ include("DataBase/Header.php");
         radio.addEventListener('change', function() {
             selectedSkin.src = `DataBase/emoji/skin/${this.value}.png`;
             drawAvatar();
-            saveData();
+            saveData("Skin");
         });
     });
 
@@ -263,16 +264,25 @@ include("DataBase/Header.php");
         }
     }
 
-    function saveData() {
-        const selectedEyesValue = document.querySelector('input[name="eyes"]:checked').value;
-        const selectedMouthValue = document.querySelector('input[name="mouth"]:checked').value;
-        const selectedSkinValue = document.querySelector('input[name="skin"]:checked').value;
-
-        localStorage.setItem('Eyes', selectedEyesValue);
-        localStorage.setItem('Mouth', selectedMouthValue);
-        localStorage.setItem('Skin', selectedSkinValue);
-    }
+    function saveData(Feature) {
+        if (Feature === "Eyes"){
+            const selectedEyesValue = document.querySelector('input[name="eyes"]:checked').value;
+            localStorage.setItem('Eyes', selectedEyesValue);
+        }
+        else if (Feature === "Mouth"){
+            const selectedMouthValue = document.querySelector('input[name="mouth"]:checked').value;
+            localStorage.setItem('Mouth', selectedMouthValue);
+        }else if (Feature === "Skin"){
+            const selectedSkinValue = document.querySelector('input[name="skin"]:checked').value;
+            localStorage.setItem('Skin', selectedSkinValue);
+        }else {
+            console.log("Something Went Wrong with the saveData()");
+        }
+        
+        }
 </script>
+
+
 
 </body>
 

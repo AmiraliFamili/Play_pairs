@@ -23,7 +23,6 @@ include("DataBase/Header.php");
 ?>
 
 <main>
-
     <div class="StartGame">
         <abbr title="Just Click It :)"> <button onclick='startGame()'>Start Game</button></abbr>
     </div>
@@ -419,6 +418,7 @@ include("DataBase/Header.php");
                                 const Success = document.getElementById('Status');
                                 Success.textContent = "Success";
                                 Success.style.color = "green";
+                                Success.style.fontSize = "170px";
                                 Success.style.display = "inline-block";
                                 let Wrapper = document.querySelector("div.wrapper");
                                 Wrapper.remove();
@@ -633,13 +633,13 @@ include("DataBase/Header.php");
             fetch(URL, {
                     method: "POST",
                     headers: {
-                        "Content-Type": "application/json"
+                        "Content-Type": "application/json ; charset = UTF-8"
                     },
                     body: JSON.stringify(GameData)
                 })
                 .then(response => {
                     if (response.ok) {
-                        return response.text(); // get the response text
+                        return response.text();
                     } else {
                         throw new Error("Error Whilst Sending Data : " + response.statusText);
                     }
@@ -652,6 +652,54 @@ include("DataBase/Header.php");
                 });
 
         }
+
+        function Send() {
+
+            var Level = parseInt(localStorage.getItem("Level"));
+            const AllScores = localStorage.getItem('LevelScores');
+            var TotalAttempts = parseInt(localStorage.getItem("GameAttempts"));
+            var TotalTime = parseInt(localStorage.getItem("GameTime"));
+            const Username = localStorage.getItem("Username");
+            // Create a new form element
+            const form = document.createElement('form');
+
+            // Set the action and method attributes of the form
+            form.action = 'leaderboard.php';
+            form.method = 'post';
+
+            // Create a new input element
+            const Time = document.createElement('input');
+            const Scores = document.createElement('input');
+            const Attempts = document.createElement('input');
+            const BestLevel = document.createElement('input');
+            const User = document.createElement('input');
+
+            // Set the name and value attributes of the input element
+            Time.name = "Time";
+            Time.value = TotalTime;
+            Scores.name = "Score";
+            Scores.value = AllScores ;
+            Attempts.name = "Attempts";
+            Attempts.value = TotalAttempts;
+            BestLevel.name = "Level";
+            BestLevel.value = Level;
+            User.name = "username";
+            User.value = Username ;
+
+            // Add the input element to the form
+            form.appendChild(Time);
+            form.appendChild(Scores);
+            form.appendChild(Attempts);
+            form.appendChild(BestLevel);
+            form.appendChild(User);
+
+            // Add the form to the document body
+            document.body.appendChild(form);
+
+            // Submit the form
+            form.submit();
+        }
+
 
 
         function RetryLevel() {
@@ -779,15 +827,16 @@ include("DataBase/Header.php");
     <span id="Status" style="display: none;"></span>
     <span id="Score" style="display: none;"></span>
 
+
+
+    <abbr title="The Score Will Be Set To Zero"><button class="RetryLevel" id="RetryButton" onclick="RetryLevel()" style="display:none;">Play Again</button></abbr>
+    <abbr title="Go Anywhere As Long As It's Forward"><button class="NextLevel" id="NextLevelButton" onclick="NextLevel()" style="display:none;">Next Level</button></abbr>
+    <abbr title="Giving Up So Soon ??? DiD You Knew Max Level Has 756 Cards and You Have To Choose 7 Cards With Each Attempt :)"><button class="SubmitGame" id="SubmitGame" onclick="Send()" style="display:none;">End And Submit</button></abbr>
+    <p class="GameInfo" id="Information" style="display:none;">
+        <br><b id="Level" style="font-size: xx-large;  color: rgb(239, 31, 72);"></b><br><b id="CardNum"></b><br><b id="MatchNum"></b><br><b id="PersonalBest"></b><br><b id="ScoreSoFar"></b>
+    </p>
+
 </main>
-
-<abbr title="The Score Will Be Set To Zero"><button class="RetryLevel" id="RetryButton" onclick="RetryLevel()" style="display:none;">Play Again</button></abbr>
-<abbr title="Go Anywhere As Long As It's Forward"><button class="NextLevel" id="NextLevelButton" onclick="NextLevel()" style="display:none;">Next Level</button></abbr>
-<abbr title="Giving Up So Soon ??? DiD You Knew Max Level Has 756 Cards and You Have To Choose 7 Cards With Each Attempt :)"><button class="SubmitGame" id="SubmitGame" onclick="SubmitGame()" style="display:none;">End And Submit</button></abbr>
-<p class="GameInfo" id="Information" style="display:none;">
-    <br><b id="Level" style="font-size: xx-large;  color: rgb(239, 31, 72);"></b><br><b id="CardNum"></b><br><b id="MatchNum"></b><br><b id="PersonalBest"></b><br><b id="ScoreSoFar"></b>
-</p>
-
 </body>
 
 </html>

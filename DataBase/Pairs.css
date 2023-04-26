@@ -31,6 +31,7 @@ body{
   background-color: rgb(2, 0, 17);
 }
 
+
 body::before {
   content: "";
   position: fixed;
@@ -58,7 +59,7 @@ body::after {
   height: 70vh;
   width: 70vw;
   max-width: 500px;
-  background: radial-gradient(circle,rgb(1, 140, 175),rgb(29, 113, 134),rgb(133, 15, 15));
+  background: radial-gradient(circle,gray,gray,gray,gray,rgb(193, 38, 38));
   border-radius: 90px;
   margin: auto ;
 }

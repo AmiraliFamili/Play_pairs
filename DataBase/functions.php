@@ -26,9 +26,8 @@ function GetUserData()
     }
 }
 
-function createAvatars()
-{
-
+function createAvatars(){
+    
     $Alleyes = array("closed", "laughing", "long", "normal", "rolling", "winking");
     $Allmouth = array("open", "sad", "smiling", "straight", "surprise", "teeth");
     $Allskin = array("green", "red", "yellow");
