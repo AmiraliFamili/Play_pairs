@@ -15,18 +15,6 @@ h1 {
     -webkit-text-fill-color: transparent;
 }
 
-a:hover {
-  background: linear-gradient(to right,  rgb(0, 98, 218), rgb(252, 18, 18));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-a:active {
-  background: linear-gradient(to right,  rgb(0, 98, 218), rgb(252, 18, 18));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-
-
 #main {
     position: relative;
     height: 100vh;
@@ -48,25 +36,97 @@ a:active {
     padding: 20px;
     z-index: 1;
   }
+
+  #ShowPairs {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 90%;
+  }
   
-
-  #Fun {
-    font-size: xx-large;
-    background: linear-gradient(to left,  rgb(0, 115, 255), rgb(255, 45, 45));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+  #ShowPairs button {
+    padding: 50px;
+    background: linear-gradient(to right,  rgb(28, 117, 225),rgb(161, 88, 161) ,rgb(234, 53, 53));
+    color: rgb(50, 0, 0);
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 100px;
+    font-family: "Comic sans MS";
+    display: inline-block;
     text-align: center;
-
+    width: 100%;
+    margin-left: 5%;
+    margin-right: 5%;
   }
 
-  #FunLink {
-
+  #ShowRegistration {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 90%;
     font-size: xx-large;
-    background: linear-gradient(to left,  rgb(0, 115, 255), rgb(255, 45, 45));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+    color: black;
     text-align: center;
     
   }
-
   
+  #ShowRegistration button {
+    padding: 50px;
+    background: linear-gradient(to right,  rgb(28, 117, 225),rgb(161, 88, 161) ,rgb(234, 53, 53));
+    color: rgb(50, 0, 0);
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 100px;
+    font-family: "Comic sans MS";
+    display: inline-block;
+    text-align: center;
+    width: 100%;
+    margin-left: 5%;
+    margin-right: 5%;
+  }
+
+ #GameInf {
+    padding: 25px;
+    background-color: #e74f3e;
+    display: inline-block;
+    color: rgb(0, 0, 0);
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 20px;
+    text-align: center;
+    font-family: "Comic sans MS";
+    margin-left: auto;
+  }
+
+ #Exit {
+  padding: 25px;
+  background-color: #cd66fd;
+  display: inline-block;
+  color: rgb(0, 0, 0);
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 20px;
+  text-align: center;
+  font-family: "Comic sans MS";
+  margin-left: 47%;
+  margin-right: 0%;
+
+}
+
+#NewUser {
+  padding: 25px;
+  background-color: #098d8b;
+  display: inline-block;
+  color: rgb(0, 0, 0);
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 20px;
+  text-align: center;
+  font-family: "Comic sans MS";
+  margin-left: auto;
+}

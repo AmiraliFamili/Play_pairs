@@ -4,7 +4,7 @@ html {
 }
 
 html, body {
-  background:  linear-gradient(to top, rgb(211, 94, 94), rgb(202, 44, 44), rgb(255, 111, 0), rgb(211, 94, 94));
+  background:  linear-gradient(to right,rgb(29, 0, 0), rgb(113, 4, 30), rgb(121, 3, 30),rgb(29, 0, 0));
   height: 100%;
   margin: 0;
   padding: 5px;
@@ -14,13 +14,13 @@ html, body {
 h1 {
     font-size: 100px;
     text-align: center;
-    background: linear-gradient(to right, rgb(26, 215, 102), rgb(187, 38, 237));
+    background: linear-gradient(to right, rgb(15, 73, 180), rgb(187, 19, 243));
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
 }
 
 #Table{
-  background-color: rgb(128, 128, 128, 0.5);
+  background-color: rgb(128, 128, 128, 0.4);
   box-shadow: 5px;
   text-align: center;
   display: flex;
@@ -29,10 +29,11 @@ h1 {
   margin: auto;
   margin-left: auto;
   margin-right: auto;
+  border-radius: 40px;
 }
 
 #LevelTable {
-  background-color: rgb(128, 128, 128, 0.5);
+  background-color: rgb(128, 128, 128, 0.4);
   box-shadow: 5px;
   text-align: center;
   display: flex;
@@ -41,6 +42,7 @@ h1 {
   margin: auto;
   margin-left: auto;
   margin-right: auto;
+  border-radius: 40px;
 }
 
 table{
@@ -55,7 +57,7 @@ table{
 
 th,
 td {
-  border: 2px solid rgb(0, 0, 255, 0.6);
+  border: 2px solid rgb(0, 0, 255, 0.3);
   width: 300px;
   height: 60px;
   padding: 5px;
@@ -63,7 +65,7 @@ td {
 }
 caption,
 th {
-  background-color: rgb(0, 0, 255, 0.6);
+  background-color: rgb(0, 0, 255, 0.5);
   border: 2px;
 }
 caption{

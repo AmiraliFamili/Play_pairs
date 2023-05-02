@@ -1,31 +1,4 @@
 <?php
-session_start();
-
-
-function redirect($location)
-{
-    header("Location: $location");
-}
-
-function GetUserData()
-{
-
-    $_SESSION['username'] = filter_input(INPUT_POST, "username");
-    $_SESSION['password'] = filter_input(INPUT_POST, "password");
-    $_SESSION['confpassword'] = filter_input(INPUT_POST, "confpassword");
-
-
-    if (isset($_SESSION['username']) && isset($_SESSION['password'])) {
-        $hashed_password = password_hash($_SESSION['password'], PASSWORD_DEFAULT);
-
-        // Store the user's information in a cookie
-        setcookie('username', $_SESSION['username'], time() + (86400 * 180), '/'); // expires in 180 days
-        setcookie('hashed_password', $hashed_password, time() + (86400 * 180), '/'); // expires in 180 days
-
-        echo "Session variables and cookies are set successfully!";
-    }
-}
-
 function createAvatars(){
     
     $Alleyes = array("closed", "laughing", "long", "normal", "rolling", "winking");
@@ -79,7 +52,6 @@ function createAvatars(){
                 // Save the new image to the avatars folder
                 $counter++;
                 imagepng($avatar, "DataBase/emoji/avatars/avatar$counter.png");
-
 
                 // Destroy the images
                 imagedestroy($avatar);

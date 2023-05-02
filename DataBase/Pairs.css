@@ -2,7 +2,11 @@
 
 /*background: repeating-linear-gradient(45deg, red, blue 10%, rgb(0, 0, 0) 60%);*/
   /*background: conic-gradient(from 0deg at center, red, blue, green,red);*/
-html::before {
+html{
+  font-family: "Comic sans MS";
+}
+
+  html::before {
   content: "";
   position: fixed;
   top: 0;
@@ -168,6 +172,16 @@ body::after {
   width: 100%;
   text-align: center;
 }
+.Container {
+  position: fixed;
+  bottom: 15%;
+  width: 90%;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  justify-content: space-between;
+}
+
 .RetryLevel {
   padding: 20px;
   background-color: #409442;
@@ -178,10 +192,8 @@ body::after {
   font-size: 20px;
   text-align: center;
   font-family: "Comic sans MS";
-  position: fixed;
-  bottom: 150px;
-  left: 180px ;
 }
+
 .NextLevel {
   padding: 25px;
   background-color: #4db250;
@@ -192,9 +204,6 @@ body::after {
   font-size: 20px;
   text-align: center;
   font-family: "Comic sans MS";
-  position: fixed;
-  bottom: 100px;
-  right: 180px ;
 }
 #BestScore {
   padding: 25px;
@@ -235,11 +244,26 @@ body::after {
   text-align: center;
   font-family: "Comic sans MS";
   position: fixed;
-  top: 70%;
+  top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%);
+  transform: translateX(-50%);
 }
 #SubmitGame {
+  padding: 25px;
+  background-color: #f57433;
+  color: rgb(0, 0, 0);
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 23px;
+  text-align: center;
+  font-family: "Comic sans MS";
+  position: fixed;
+  bottom: 5%;
+  left: 50%;
+  transform: translateX(-50%);
+}
+#register {
   padding: 25px;
   background-color: #f57433;
   color: rgb(0, 0, 0);

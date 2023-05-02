@@ -4,10 +4,12 @@ $title = "Login";
 $stylesheet = "DataBase/Registration.css";
 include("DataBase/Header.php");
 
-// set Username and Password to "" or null somewhere at the begining ... 
 
+/*
+This is the registration webpage , it asks the user for username , password and to conform their password using 
+a form , it alssow allowes users to create their own customised avatar icon which will be used later in navbar 
+*/
 ?>
-
 
 <h1>Login</h1>
 <br><br>
@@ -31,7 +33,7 @@ include("DataBase/Header.php");
 
     <br>
     <fieldset>
-        <legend>Avatar</legend>
+        <legend id="AVT">Avatar</legend>
         <figure>
             <br>
             <figcaption>Eyes : </figcaption><br>
@@ -126,7 +128,6 @@ include("DataBase/Header.php");
 
             <p id="selected-skin-value"></p>
 
-
             <br><br><br>
             <canvas id='avatar' width="120" height="120"></canvas>
         </figure>
@@ -138,7 +139,7 @@ include("DataBase/Header.php");
 </form>
 
 <script>
-    function checkUsername() { 
+    function checkUsername() {  // checking the input for username live to check if they are entering their username with correct parameters 
         var username = document.getElementById("username").value;
 
         if (username.length > 30) {
@@ -163,7 +164,7 @@ include("DataBase/Header.php");
         return true;
     }
 
-    function checkPassword() { 
+    function checkPassword() {  // checking the password for correct length 
         var Password = document.getElementById("password").value;
 
         if (Password.length < 8) {
@@ -177,7 +178,7 @@ include("DataBase/Header.php");
         return true;
     }
 
-    function checkConfPassword() { 
+    function checkConfPassword() { // check to see if the priviious password and the conformed passwords match 
         var Password = document.getElementById("password").value;
         var confPassword = document.getElementById("confpassword").value;
 
@@ -190,7 +191,7 @@ include("DataBase/Header.php");
         return true;
     }
 
-    function ResolveErrors() {
+    function ResolveErrors() { // checks to see if there is no errors with username, password and conform password 
         var isUsernameValid = checkUsername();
         var isPasswordValid = checkPassword();
         var isConfPasswordValid = checkConfPassword();
@@ -202,9 +203,12 @@ include("DataBase/Header.php");
 
         return true;
     }
+    
 </script>
 
 <script>
+    // The following code will gather the information from the radio inputs and link them to their picture and
+    // draw them on top of each other and display them for the user as they choose from the set of options 
 
     const selectedEyes = new Image();
     selectedEyes.src = `DataBase/emoji/eyes/${localStorage.getItem('Eyes')}.png`;
@@ -218,7 +222,7 @@ include("DataBase/Header.php");
     const canvas = document.getElementById('avatar');
     const ctx = canvas.getContext('2d');
 
-    drawAvatar();
+    drawAvatar(); // drawing the avatar live for the user to see 
 
     // Add event listeners to the radio buttons
     const eyes = document.querySelectorAll('input[name="eyes"]');
@@ -252,19 +256,14 @@ include("DataBase/Header.php");
         // Wait until all images are loaded
         if (selectedEyes.complete && selectedMouth.complete && selectedSkin.complete) {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-            // Draw the skin first
             ctx.drawImage(selectedSkin, 0, 0, canvas.width, canvas.height);
-
-            // Draw the eyes on top of the skin
             ctx.drawImage(selectedEyes, 0, 0, canvas.width, canvas.height);
-
-            // Draw the mouth on top of the eyes and skin
             ctx.drawImage(selectedMouth, 0, 0, canvas.width, canvas.height);
+            // drawing the avatar image with gathered eyes , mouth and skin into the canvas 
         }
     }
 
-    function saveData(Feature) {
+    function saveData(Feature) { // saving the avatar features for later use 
         if (Feature === "Eyes"){
             const selectedEyesValue = document.querySelector('input[name="eyes"]:checked').value;
             localStorage.setItem('Eyes', selectedEyesValue);
