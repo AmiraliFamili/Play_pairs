@@ -1,65 +1,59 @@
 <?php
-
-
-// set back ground pricture for each page !! 
-// add lose conditions for many failed attempts ... 
-// think about timeing the game ... 
-// the ajax request to leaderboard 
-// add the score from each level to a main score count 
-// add submit button 
-// start working on the sessions ...  for both leaderboard and registration 
-// the avatar should be shown in the navbar 
-// follow the spesification for when user registers ... 
-// the problem with information and local storage ... 
-
+session_start();
 $title = "Play Pairs";
 $stylesheet = "DataBase/Pairs.css";
 include("DataBase/Header.php");
-//require_once("Database/functions.php");
-//createAvatars();
+if (!isset($_SESSION['avatarCreated'])) { // this lines of php will make sure that the avatars are only generated once 
+    include_once("DataBase/functions.php");
+    createAvatars();
+    $_SESSION['avatarCreated'] = true;
+}
 
-
-
+/*
+This is the Pairs Game , it contains javascipt code for designing the apperamce and logic of the game 
+the game it self is a level based game which allows users to play again , progress to next level and submit their score , (or register to the website)
+important notes about the logic of the game and the code is available in the code . 
+*/
 ?>
 
 <main>
     <div class="StartGame">
-        <abbr title="Just Click It :)"> <button onclick='startGame()'>Start Game</button></abbr>
+        <abbr title="Just Click It :)"><button onclick='startGame()'>Start Game</button></abbr>
     </div>
 
     <script>
         localStorage.setItem("GameTime", 0);
         localStorage.setItem("GameAttempts", 0);
 
-        function startGame() {
+        function startGame() { // This function will be called only once , starts the game , and will disappear afterwords 
             document.querySelector(".StartGame").style.display = "none";
 
             setTimeout(function() {
-                cardGame();
-            }, 10000);
+                cardGame(); // call the cardgame function after 10 seconds 
+            }, 5000);
 
-            setTimeout(function() {
+            setTimeout(function() { // setting the values for the first level 
                 localStorage.setItem("ToPair", 2);
-                localStorage.setItem("TotalPairs", 1);
+                localStorage.setItem("TotalPairs", 3);
                 localStorage.setItem("Level", 1);
                 displayInfo();
             }, 1000);
         }
 
-
         const LevelScores = [];
-        const StringLevelScores = JSON.stringify(LevelScores);
+        const StringLevelScores = JSON.stringify(LevelScores); // This array is used to store the score for each level (index -1 === Level's Score)
         localStorage.setItem("LevelScores", StringLevelScores);
 
-        function cardGame(ToPair = 2, TotalPairs = 1, Level = 1) { // change names 
-            if (Level == 1) {
+        function cardGame(ToPair = 2, TotalPairs = 3, Level = 1) { // main function for runing the game 
+            if (Level == 1) { // making sure that the values are set 
                 localStorage.setItem("ToPair", ToPair);
                 localStorage.setItem("TotalPairs", TotalPairs);
                 localStorage.setItem("Level", Level);
             }
-            const height = ((ToPair * TotalPairs) / 5 * Level) + 50;
+            const height = ((ToPair * TotalPairs) / 5 * Level) + 50; // This line uses a formula to increase the height of the wrapper class (main div) to keep the cards fit in the div  
 
-            const StartTime = Date.now();
+            const StartTime = Date.now(); // starts the timer for the game 
+            // creating Elements necessary : 
             const wrapper = document.createElement('div');
             wrapper.style.height = `${height}vh`;
             wrapper.classList.add('wrapper');
@@ -75,7 +69,7 @@ include("DataBase/Header.php");
             start.style.display = 'none'; // Hide the Start Game button 
 
 
-            for (let i = 1; i <= ToPair; i++) {
+            for (let i = 1; i <= ToPair; i++) { // Making the cards with two for loops , the first one is for how many cards to match and the inner loop for how many cards that the game contains 
                 for (let j = 1; j <= TotalPairs; j++) {
                     // create a new li element
                     const li = document.createElement('li');
@@ -109,19 +103,17 @@ include("DataBase/Header.php");
 
                     // add the li element to the cards list
                     cardsList.appendChild(li);
-
                 }
             }
 
             const cards = document.querySelectorAll(".card");
             let firstCard, secondCard, thirdCard, fourthCard, fifthCard, sixthCard, seventhCard; // we have seven pairs in total 
             let finished = false;
-            const MaxScore = 10000;
+            const MaxScore = 10000; // Max Score 
             let MatchedNum = 0;
             let Attempts = 0;
 
-
-            function ShuffleCards() {
+            function ShuffleCards() { // Selecting random avatar images for pairing between all avatar images 
                 let selectedAvatars = [];
                 let AllAvatars = [];
                 for (let i = 1; i <= 108; i++) {
@@ -140,11 +132,11 @@ include("DataBase/Header.php");
                 MatchedNum = 0;
                 firstCard = secondCard = thirdCard = fourthCard = fifthCard = sixthCard = seventhCard = "";
 
-                cards.forEach((card, index) => {
+                cards.forEach((card, index) => { 
                     card.classList.remove("fliped");
                     let Tag = card.querySelector("img");
                     Tag.src = `DataBase/emoji/avatars/avatar${selectedAvatars[index]}.png`;
-                    switch (ToPair) {
+                    switch (ToPair) { // checking to see how many cards should be paired and how many cards should be fliped 
                         case 2:
                             card.addEventListener("click", flip2);
                             break;
@@ -169,7 +161,7 @@ include("DataBase/Header.php");
                     }
                 });
             }
-
+            // the flio functions are used to determine how many cards should be selected in final comparison of their path 
             function flip2(m) {
                 let clicked = m.target; // when user clicks a card 
                 if (clicked !== firstCard && !finished) { // prevents the user from clicking the same card twice 
@@ -341,20 +333,20 @@ include("DataBase/Header.php");
                 }
             }
 
-            function MatchCards(...images) {
-                Attempts++;
-                if (images.every((image) => image === images[0])) {
+            function MatchCards(...images) { // This function will take a list in a size between 2-7 and which are the selected cards to be compared 
+                Attempts++; // keeps track of number of attempts 
+                if (images.every((image) => image === images[0])) { // checking to see if all the image paths are the same as the first card selected 
                     MatchedNum++;
                     if (MatchedNum === TotalPairs) {
                         const StringAllScores = localStorage.getItem('LevelScores');
                         let AllScores = JSON.parse(StringAllScores);
                         const EndTime = Date.now();
 
-                        let Time = EndTime - StartTime;
-                        var Level = parseInt(localStorage.getItem("Level"));
+                        let Time = EndTime - StartTime; // calculating the total time for level
+                        var Level = parseInt(localStorage.getItem("Level")); // current level stored in local storage 
 
-                        let UserScore = MaxScore - ((Attempts * 1000 / TotalPairs) + (Time / TotalPairs) - (Level * 1000));
-                        UserScore = Math.floor(UserScore);
+                        let UserScore = MaxScore - ((Attempts * 1000 / TotalPairs) + (Time / TotalPairs) - (Level * 1000)); // calculating the user's score 
+                        UserScore = Math.floor(UserScore); // removing the decimal points 
 
 
                         var newScore = false;
@@ -365,7 +357,7 @@ include("DataBase/Header.php");
                                 AllScores[Level - 1] = 0;
                             }
 
-                            setTimeout(() => {
+                            setTimeout(() => { // checking to see if the score for the current level is higher than the privious score 
                                 if (AllScores[Level - 1] <= UserScore && AllScores[Level - 1] !== 0) {
                                     newScore = true;
                                     const bestScore = document.getElementById('BestScore');
@@ -375,7 +367,7 @@ include("DataBase/Header.php");
                                     const wrapperBackColor = document.querySelector('.wrapper');
                                     wrapperBackColor.style.background = 'radial-gradient(circle, #ffd700, #ffd700,#faec99)';
                                 }
-                                AllScores[Level - 1] = UserScore;
+                                AllScores[Level - 1] = UserScore; // seting the new score as the highest score for level and updateing the list 
                                 const UpdatedAllScores = JSON.stringify(AllScores);
                                 localStorage.setItem('LevelScores', UpdatedAllScores);
                             }, 500)
@@ -411,14 +403,14 @@ include("DataBase/Header.php");
                         if (!Failed) {
                             setTimeout(() => {
                                 const SuccessScore = document.getElementById('Score');
-                                SuccessScore.innerHTML = ` <br><br> Ur Score :) &nbsp;&nbsp;&nbsp; ${UserScore} <br><br> Time : ${Math.floor(Time/1000)}s &nbsp;&nbsp;&nbsp;&nbsp; Attempts : ${Attempts}`;
+                                SuccessScore.innerHTML = `<br><br> Ur Score :) &nbsp;&nbsp;&nbsp; ${UserScore} <br><br> Time : ${Math.floor(Time/1000)}s &nbsp;&nbsp;&nbsp;&nbsp; Attempts : ${Attempts}`;
                                 SuccessScore.style.color = "gold";
                                 SuccessScore.style.backgroundColor = "rgb(2, 0, 17)";
                                 SuccessScore.style.display = "inline-block";
                                 const Success = document.getElementById('Status');
                                 Success.textContent = "Success";
                                 Success.style.color = "green";
-                                Success.style.fontSize = "170px";
+                                Success.style.fontSize = "150px";
                                 Success.style.display = "inline-block";
                                 let Wrapper = document.querySelector("div.wrapper");
                                 Wrapper.remove();
@@ -434,8 +426,11 @@ include("DataBase/Header.php");
                             }, 1500);
                         }
 
-                        if (Level >= 2) {
+                        if (localStorage.getItem("Username") && localStorage.getItem("Password")) {
                             var EndGame = document.getElementById("SubmitGame");
+                            EndGame.style.display = "inline-block";
+                        }else {
+                            var EndGame = document.getElementById("register");
                             EndGame.style.display = "inline-block";
                         }
 
@@ -443,7 +438,6 @@ include("DataBase/Header.php");
 
 
                     switch (ToPair) {
-
                         case 2:
                             firstCard.removeEventListener("click", flip2);
                             firstCard = "";
@@ -604,56 +598,7 @@ include("DataBase/Header.php");
     </script>
 
     <script>
-        function SubmitGame() {
-
-            var TotalScore = 0;
-            var BestLevel = parseInt(localStorage.getItem("Level"));
-            const StringAllScores = localStorage.getItem('LevelScores');
-            let AllScores = JSON.parse(StringAllScores);
-
-            AllScores.forEach(function(score) {
-                score = parseInt(score);
-                TotalScore += score;
-            });
-
-            var TotalAttempts = parseInt(localStorage.getItem("GameAttempts"));
-            var TotalTime = parseInt(localStorage.getItem("GameTime"));
-
-            const GameData = {
-                Score: TotalScore,
-                MaxLevel: BestLevel,
-                TotalAttempts: TotalAttempts,
-                TotalTime: TotalTime
-            };
-
-            const URL = "leaderboard.php";
-
-            console.log("GameData: ", JSON.stringify(GameData));
-
-            fetch(URL, {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json ; charset = UTF-8"
-                    },
-                    body: JSON.stringify(GameData)
-                })
-                .then(response => {
-                    if (response.ok) {
-                        return response.text();
-                    } else {
-                        throw new Error("Error Whilst Sending Data : " + response.statusText);
-                    }
-                })
-                .then(responseText => {
-                    console.log("Data Sent Successfully : " + responseText);
-                })
-                .catch(error => {
-                    console.error("Error Whilst Sending Data : ", error);
-                });
-
-        }
-
-        function Send() {
+        function Send() { // sending a post request to leaderboard with user's game result 
 
             var Level = parseInt(localStorage.getItem("Level"));
             const AllScores = localStorage.getItem('LevelScores');
@@ -667,14 +612,14 @@ include("DataBase/Header.php");
             form.action = 'leaderboard.php';
             form.method = 'post';
 
-            // Create a new input element
+            // Create new input elements
             const Time = document.createElement('input');
             const Scores = document.createElement('input');
             const Attempts = document.createElement('input');
             const BestLevel = document.createElement('input');
             const User = document.createElement('input');
 
-            // Set the name and value attributes of the input element
+            // Set the name and value attributes of the input elements
             Time.name = "Time";
             Time.value = TotalTime;
             Scores.name = "Score";
@@ -686,7 +631,7 @@ include("DataBase/Header.php");
             User.name = "username";
             User.value = Username ;
 
-            // Add the input element to the form
+            // Add the input elements to the form
             form.appendChild(Time);
             form.appendChild(Scores);
             form.appendChild(Attempts);
@@ -702,7 +647,9 @@ include("DataBase/Header.php");
 
 
 
-        function RetryLevel() {
+        function RetryLevel() { // setting the display of all buttons to none and calling the cardsgame with the values for the current level 
+            var register = document.getElementById("register");
+            register.style.display = "none";
             var EndGame = document.getElementById("SubmitGame");
             EndGame.style.display = "none";
             var RetryButton = document.getElementById("RetryButton");
@@ -728,7 +675,9 @@ include("DataBase/Header.php");
 
         }
 
-        function NextLevel() {
+        function NextLevel() { // setting all the button displays to none and increasing the number of cards , and cards to match , saving them and calling the cardgame function with updated values 
+            var register = document.getElementById("register");
+            register.style.display = "none";
             var EndGame = document.getElementById("SubmitGame");
             EndGame.style.display = "none";
             const Fail = document.getElementById("Status");
@@ -746,19 +695,10 @@ include("DataBase/Header.php");
             var TotalPairs = parseInt(localStorage.getItem("TotalPairs"));
             var Level = parseInt(localStorage.getItem("Level"));
 
-
             Level++;
 
             if (TotalPairs <= 108) {
-                if (Level <= 5) {
-                    TotalPairs += 2;
-                }
-                if (Level > 5 && Level <= 10) {
-                    TotalPairs += 3;
-                }
-                if (Level > 11) {
-                    TotalPairs++;
-                }
+                    TotalPairs ++ ;
                 if (Level === 10 || Level === 20 || Level === 40 || Level === 65 || Level === 100) {
                     ToPair += 1;
                 }
@@ -766,11 +706,9 @@ include("DataBase/Header.php");
                 localStorage.setItem("TotalPairs", TotalPairs);
                 localStorage.setItem("Level", Level);
 
-
                 var ToPair = parseInt(localStorage.getItem("ToPair"));
                 var TotalPairs = parseInt(localStorage.getItem("TotalPairs"));
                 var Level = parseInt(localStorage.getItem("Level"));
-
 
                 setTimeout(function() {
                     displayInfo();
@@ -790,7 +728,7 @@ include("DataBase/Header.php");
 
         }
 
-        function displayInfo() {
+        function displayInfo() { // Displayes information about the level that is going to begin
             const level = document.getElementById('Level');
             const matchNum = document.getElementById('MatchNum');
             const personalBest = document.getElementById('PersonalBest');
@@ -810,7 +748,7 @@ include("DataBase/Header.php");
             } else {
                 personalBest.style.fontSize = "x-Large";
                 personalBest.style.color = "#4CAF50";
-                personalBest.textContent = `Highest Score For This Level ${AllScores[Level - 1]}`;
+                personalBest.textContent = `Highest Score For This Level Is ${AllScores[Level - 1]}`;
             }
 
             level.textContent = `Level : ${Level}`;
@@ -827,11 +765,17 @@ include("DataBase/Header.php");
     <span id="Status" style="display: none;"></span>
     <span id="Score" style="display: none;"></span>
 
+    <script>
+        // Buttons used to call relavent functions and continue the game untill the user submits their score 
+    </script>
 
 
-    <abbr title="The Score Will Be Set To Zero"><button class="RetryLevel" id="RetryButton" onclick="RetryLevel()" style="display:none;">Play Again</button></abbr>
+   <div class="Container">
+   <abbr title="The Score Will Be Set To Zero"><button class="RetryLevel" id="RetryButton" onclick="RetryLevel()" style="display:none;">Play Again</button></abbr>
     <abbr title="Go Anywhere As Long As It's Forward"><button class="NextLevel" id="NextLevelButton" onclick="NextLevel()" style="display:none;">Next Level</button></abbr>
+   </div>
     <abbr title="Giving Up So Soon ??? DiD You Knew Max Level Has 756 Cards and You Have To Choose 7 Cards With Each Attempt :)"><button class="SubmitGame" id="SubmitGame" onclick="Send()" style="display:none;">End And Submit</button></abbr>
+    <abbr title="Register To Our Website To Take Your Rightful Place In The Leaderboard :)"><button class="register" id="register" style="display:none;" onclick="window.location.href = 'registration.php'">Register Now</button></abbr>
     <p class="GameInfo" id="Information" style="display:none;">
         <br><b id="Level" style="font-size: xx-large;  color: rgb(239, 31, 72);"></b><br><b id="CardNum"></b><br><b id="MatchNum"></b><br><b id="PersonalBest"></b><br><b id="ScoreSoFar"></b>
     </p>
