@@ -1,5 +1,5 @@
 # A web Based memory Game within a delightful Website 
-This is a Game
+
 Bullet Points For Webpages : 
 
 index.php:
